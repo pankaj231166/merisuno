@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Meri Suno - Speak</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #E6E6FA, #D0F0C0);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    text-align: center;
+}
+
+.container {
+    width: 90%;
+    max-width: 500px;
+}
+
+textarea {
+    width: 100%;
+    height: 150px;
+    padding: 15px;
+    border-radius: 15px;
+    border: none;
+    font-size: 16px;
+}
+
+button {
+    margin-top: 20px;
+    padding: 12px 25px;
+    border-radius: 25px;
+    border: none;
+    background: #A8E6CF;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.message {
+    margin-top: 20px;
+    font-size: 18px;
+    display: none;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+    <h2>Yahan koi nahin hai.</h2>
+    <p>Aap jo kahoge, bas wahi hoga.</p>
+
+    <textarea id="text" placeholder="Jo dil mein hai, likh do..."></textarea>
+
+    <button onclick="release()">Release</button>
+<button onclick="startListening()">🎤 Bolke batao</button>
+
+    <div class="message" id="msg">Aapki baat yahin reh gayi…</div>
+</div>
+<body>
+<script>
+let recognition;
+
+function startListening() {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+    if (!SpeechRecognition) {
+        alert("Speech recognition not supported");
+        return;
+    }
+
+    recognition = new SpeechRecognition();
+    recognition.lang = "en-US";
+
+    const listening = document.getElementById("listening");
+
+    recognition.onstart = function () {
+        if(listening) listening.style.display = "block";
+    };
+
+    recognition.onend = function () {
+        if(listening) listening.style.display = "none";
+    };
+
+    recognition.onresult = function (event) {
+        document.getElementById("text").value =
+            event.results[0][0].transcript;
+    };
+
+    recognition.onerror = function (event) {
+        alert("Error: " + event.error);
+    };
+
+    recognition.start();
+}
+
+function release() {
+    const text = document.getElementById("text");
+    const msg = document.getElementById("msg");
+
+    if (!text.value.trim()) return;
+
+    const speech = new SpeechSynthesisUtterance(text.value);
+    window.speechSynthesis.speak(speech);
+
+    text.value = "";
+
+    if(msg){
+        msg.style.opacity = 1;
+        setTimeout(() => msg.style.opacity = 0, 3000);
+    }
+}
+</script>
+</body>
+</html>

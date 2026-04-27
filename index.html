@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Meri Suno</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+body {
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg, #dfe9f3, #ffffff);
+    text-align: center;
+    padding-top: 50px;
+}
+
+textarea {
+    width: 80%;
+    height: 120px;
+    margin-top: 15px;
+    border-radius: 15px;
+    padding: 10px;
+    border: none;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+}
+
+button {
+    margin-top: 12px;
+    padding: 10px 20px;
+    border-radius: 20px;
+    border: none;
+    background: #89CFF0;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+button:hover {
+    transform: scale(1.05);
+}
+
+#listening {
+    display: none;
+    color: gray;
+    margin-top: 10px;
+}
+
+#msg {
+    margin-top: 20px;
+    opacity: 0;
+    transition: 0.5s;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+    <h1>Kaho. Bas kaho.</h1>
+    <p>
+        Yahan bas aap kahoge, aur koi nahin.<br>
+        Ek aisi jagah jahan aap bina dare,
+        bina roke apni baat keh sakte hain.
+    </p>
+    <a href="speak.html">
+ <button onclick="window.location.href='speak.html'">
+    Start Speaking
+</button>
+</a>
+</div>
+
+<div class="section">
+    <h2>No Identity. No Judgment. No History.</h2>
+</div>
+
+<div class="section">
+    <h2>Yeh kaise kaam karta hai?</h2>
+    <p>
+        1. Start a session – no login<br>
+        2. Type ya bol jo dil mein hai<br>
+        3. Koi jawab nahi aayega<br>
+        4. Session khatam – sab wahin khatam
+    </p>
+</div>
+
+<div class="section">
+    <p>
+        Aapko strong hone ki zarurat nahi hai.<br>
+        Aap bas keh sakte hain.<br><br>
+        Aur kabhi kabhi, wahi kaafi hota hai.
+    </p>
+</div>
+
+<div class="section">
+    <h3>Important</h3>
+    <p>
+        • Yahan aapko koi reply nahi milega<br>
+        • Yeh therapy ya counseling nahi hai<br>
+        • Yeh sirf ek jagah hai apni baat kehne ke liye<br><br>
+        If you feel overwhelmed, please contact local emergency services.
+    </p>
+</div>
+
+<div class="container">
+    <h2>Ready to let it out?</h2>
+   <button onclick="window.location.href='speak.html'">
+    Start Speaking
+</button>
+</div>
+
+<div class="footer">
+    © 2026 Meri Suno
+</div>
+
+<script>
+function startSpeaking() {
+    alert("Yahan koi nahin hai. Aap jo kahoge, bas wahi hoga.");
+}
+let recognition;
+
+function startListening() {
+    console.log("Button clicked"); // debug check
+
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+    if (!SpeechRecognition) {
+        alert("Speech recognition not supported. Use Chrome.");
+        return;
+    }
+
+    const listening = document.getElementById("listening");
+
+    recognition = new SpeechRecognition();
+    recognition.lang = "en-US";
+
+    recognition.onstart = function () {
+        console.log("Listening started");
+        if (listening) listening.style.opacity = 1;
+    };
+
+    recognition.onend = function () {
+        console.log("Listening ended");
+        if (listening) listening.style.opacity = 0;
+    };
+
+    recognition.onresult = function (event) {
+        console.log("Got result");
+        const text = event.results[0][0].transcript;
+        document.getElementById("text").value = text;
+    };
+
+    recognition.onerror = function (event) {
+        alert("Error: " + event.error);
+    };
+
+    recognition.start();
+}
+</script>
+
+</body>
+</html>
